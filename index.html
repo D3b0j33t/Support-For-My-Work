@@ -4,25 +4,26 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>Support Debojeet</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
 <style>
 :root {
-  --bg: #0a0a0f;
-  --surface: #12121a;
-  --card: #1a1a26;
-  --border: rgba(255,255,255,0.07);
-  --text: #f0eef8;
-  --sub: #8b87a4;
-  --muted: #3d3a52;
-  --accent: #a78bfa;
-  --accent2: #7c3aed;
-  --gold: #f59e0b;
+  --bg:       #1e2135;
+  --surface:  #262a42;
+  --card:     #2e3250;
+  --border:   rgba(255,255,255,0.12);
+  --text:     #f4f2ff;
+  --sub:      #a9a5c8;
+  --muted:    #5e5a7a;
+  --accent:   #c4a8ff;
+  --accent2:  #8b5cf6;
+  --gold:     #fbbf24;
+  --card-h: 300px;
+  --card-w: calc(var(--card-h) / 1.5);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { -webkit-text-size-adjust: 100%; }
 
 body {
@@ -34,64 +35,104 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 24px 16px;
   position: relative;
   overflow-x: hidden;
 }
 
-/* Orbs */
+/* Soft gradient orbs */
 .orb {
   position: fixed;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.35;
+  filter: blur(90px);
+  opacity: 0.22;
   pointer-events: none;
-  animation: drift 12s ease-in-out infinite alternate;
+  animation: drift 14s ease-in-out infinite alternate;
   will-change: transform;
 }
-.orb1 { width: clamp(260px,60vw,500px); height: clamp(260px,60vw,500px); background: #4f1d96; top: -150px; left: -100px; animation-delay: 0s; }
-.orb2 { width: clamp(200px,50vw,400px); height: clamp(200px,50vw,400px); background: #1e1b4b; bottom: -100px; right: -80px; animation-delay: -4s; }
-.orb3 { width: clamp(140px,30vw,250px); height: clamp(140px,30vw,250px); background: #7c2d12; top: 40%; left: 60%; animation-delay: -7s; }
+.orb1 { width: 480px; height: 480px; background: #6d28d9; top: -180px; left: -120px; }
+.orb2 { width: 380px; height: 380px; background: #1e3a5f; bottom: -120px; right: -100px; animation-delay: -5s; }
+.orb3 { width: 220px; height: 220px; background: #b45309; top: 38%; left: 55%; animation-delay: -9s; }
 
 @keyframes drift {
-  0%   { transform: translate(0,0) scale(1); }
-  100% { transform: translate(30px, 25px) scale(1.08); }
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(32px,24px) scale(1.09); }
 }
 
-/* Grain */
+/* Grid lines */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 52px 52px;
   pointer-events: none;
   z-index: 0;
 }
 
-/* Wrapper */
-.wrapper {
+/* Layout */
+.page {
   position: relative;
   z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0;
   width: 100%;
-  max-width: 460px;
+  max-width: 900px;
 }
 
-/* Card */
+/* Character side panels */
+.char-side {
+  width: 120px;
+  height: var(--card-h);
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  align-self: flex-end;
+}
+.char-side img {
+  position: absolute;
+  bottom: 0;
+  height: calc(var(--card-h) * 1.18);
+  max-width: 150px;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  filter: drop-shadow(0 -6px 24px rgba(0,0,0,0.65));
+}
+.char-left  img { transform: translateX(-18px); }
+.char-right img { transform: translateX(18px); }
+
+/* Show characters when hovering the whole scene */
+.page:hover .char-side img {
+  opacity: 1;
+  transform: translateX(0) !important;
+}
+
+/* UPI Card */
 .card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: clamp(20px, 4vw, 28px);
-  padding: clamp(24px, 6vw, 40px) clamp(20px, 6vw, 36px);
+  border-radius: clamp(18px, 3.5vw, 26px);
+  padding: clamp(22px, 5vw, 36px) clamp(18px, 5vw, 32px);
+  width: 100%;
+  max-width: 440px;
   backdrop-filter: blur(20px);
   box-shadow:
-    0 0 0 1px rgba(167,139,250,0.08),
-    0 40px 80px rgba(0,0,0,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.06);
-  animation: cardIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    0 0 0 1px rgba(196,168,255,0.10),
+    0 32px 72px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  animation: cardIn 0.7s cubic-bezier(0.16,1,0.3,1) both;
+  flex-shrink: 0;
 }
 
 @keyframes cardIn {
-  from { opacity: 0; transform: translateY(28px) scale(0.97); }
+  from { opacity: 0; transform: translateY(26px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
@@ -101,15 +142,15 @@ body::after {
   align-items: center;
   gap: 6px;
   padding: 5px 12px;
-  background: rgba(167,139,250,0.12);
-  border: 1px solid rgba(167,139,250,0.2);
+  background: rgba(196,168,255,0.14);
+  border: 1px solid rgba(196,168,255,0.28);
   border-radius: 100px;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 .badge .dot {
   width: 6px; height: 6px;
@@ -118,24 +159,24 @@ body::after {
   animation: pulse 2s ease-in-out infinite;
 }
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(0.75); }
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.75); }
 }
 
 h1 {
   font-family: "DM Serif Display", serif;
-  font-size: clamp(26px, 6vw, 36px);
+  font-size: clamp(24px, 5.5vw, 34px);
   line-height: 1.1;
-  letter-spacing: -0.01em;
-  margin-bottom: 10px;
+  margin-bottom: 9px;
+  color: var(--text);
 }
 h1 em { font-style: italic; color: var(--accent); }
 
 .subtitle {
-  font-size: clamp(13px, 3vw, 14px);
+  font-size: clamp(13px, 2.8vw, 14px);
   color: var(--sub);
   line-height: 1.6;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 /* Stats */
@@ -144,18 +185,20 @@ h1 em { font-style: italic; color: var(--accent); }
   border: 1px solid var(--border);
   border-radius: 14px;
   overflow: hidden;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
+  background: rgba(255,255,255,0.03);
 }
 .stat {
   flex: 1;
   text-align: center;
-  padding: clamp(10px, 3vw, 14px) 8px;
+  padding: clamp(10px,2.5vw,14px) 8px;
   border-right: 1px solid var(--border);
 }
 .stat:last-child { border-right: none; }
 .stat-num {
   font-family: "DM Serif Display", serif;
-  font-size: clamp(18px, 4vw, 22px);
+  font-size: clamp(18px,4vw,22px);
+  color: var(--text);
   line-height: 1;
 }
 .stat-label {
@@ -179,29 +222,26 @@ h1 em { font-style: italic; color: var(--accent); }
 .amounts {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: clamp(6px, 2vw, 8px);
+  gap: clamp(6px,2vw,8px);
   margin-bottom: 10px;
 }
-
-@media (max-width: 340px) {
-  .amounts { grid-template-columns: repeat(2, 1fr); }
-}
+@media (max-width: 320px) { .amounts { grid-template-columns: repeat(2,1fr); } }
 
 .amount-btn {
-  padding: clamp(10px, 3vw, 13px) 4px;
-  border-radius: 14px;
+  padding: clamp(10px,2.5vw,13px) 4px;
+  border-radius: 12px;
   background: var(--surface);
   border: 1px solid var(--border);
   cursor: pointer;
   text-align: center;
-  transition: all 0.2s ease;
   color: var(--sub);
-  position: relative;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 3px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, color 0.2s;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
@@ -213,246 +253,181 @@ h1 em { font-style: italic; color: var(--accent); }
   opacity: 0;
   transition: opacity 0.2s;
 }
-.amount-btn:hover  { border-color: rgba(167,139,250,0.4); color: var(--text); }
+.amount-btn:hover  { border-color: rgba(196,168,255,0.45); color: var(--text); }
 .amount-btn.active { border-color: var(--accent); color: var(--text); }
-.amount-btn.active::before { opacity: 0.15; }
+.amount-btn.active::before { opacity: 0.18; }
 
 .amount-value {
   font-weight: 700;
-  font-size: clamp(13px, 3.5vw, 15px);
-  position: relative;
-  z-index: 1;
+  font-size: clamp(13px,3.2vw,15px);
+  position: relative; z-index: 1;
 }
 .amount-label-small {
-  font-size: 9px;
-  font-weight: 500;
+  font-size: 9px; font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--gold);
   text-transform: uppercase;
-  position: relative;
-  z-index: 1;
+  position: relative; z-index: 1;
 }
 
-/* Custom amount */
+/* Custom input */
 .custom-wrap {
   position: relative;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 .custom-wrap .prefix {
-  position: absolute;
-  left: 14px;
-  top: 50%;
+  position: absolute; left: 14px; top: 50%;
   transform: translateY(-50%);
-  color: var(--sub);
-  font-weight: 600;
-  font-size: 15px;
+  color: var(--sub); font-weight: 600; font-size: 15px;
   pointer-events: none;
 }
 .custom-input {
   width: 100%;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 13px 14px 13px 32px;
+  border-radius: 12px;
+  padding: 12px 14px 12px 32px;
   color: var(--text);
-  font-size: 15px;
-  font-family: inherit;
-  font-weight: 500;
+  font-size: 15px; font-family: inherit; font-weight: 500;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
-  -webkit-appearance: none;
-  appearance: none;
+  -webkit-appearance: none; appearance: none;
 }
 .custom-input::placeholder { color: var(--muted); }
 .custom-input:focus {
-  border-color: rgba(167,139,250,0.5);
-  box-shadow: 0 0 0 3px rgba(167,139,250,0.08);
+  border-color: rgba(196,168,255,0.55);
+  box-shadow: 0 0 0 3px rgba(196,168,255,0.10);
 }
-/* hide spinners */
 .custom-input::-webkit-inner-spin-button,
 .custom-input::-webkit-outer-spin-button { -webkit-appearance: none; }
 .custom-input[type=number] { -moz-appearance: textfield; }
 
 /* Note */
 .note-input {
-  width: 100%;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 12px 14px;
-  color: var(--text);
-  font-size: 13px;
-  font-family: inherit;
-  outline: none;
-  resize: none;
-  height: 60px;
-  margin-bottom: 18px;
+  width: 100%; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px 14px; color: var(--text);
+  font-size: 13px; font-family: inherit;
+  outline: none; resize: none; height: 58px;
+  margin-bottom: 16px;
   transition: border-color 0.2s, box-shadow 0.2s;
   -webkit-appearance: none;
 }
 .note-input::placeholder { color: var(--muted); }
 .note-input:focus {
-  border-color: rgba(167,139,250,0.5);
-  box-shadow: 0 0 0 3px rgba(167,139,250,0.08);
+  border-color: rgba(196,168,255,0.55);
+  box-shadow: 0 0 0 3px rgba(196,168,255,0.10);
 }
 
 /* Pay button */
 .upi-pay-btn {
   width: 100%;
-  padding: clamp(14px, 4vw, 16px);
-  border-radius: 16px;
-  border: none;
+  padding: clamp(13px,3.5vw,16px);
+  border-radius: 14px; border: none;
   background: linear-gradient(135deg, #7c3aed, #a78bfa);
   color: white;
-  font-size: clamp(14px, 3.5vw, 15px);
-  font-weight: 600;
-  font-family: inherit;
+  font-size: clamp(14px,3.2vw,15px); font-weight: 600; font-family: inherit;
   cursor: pointer;
-  transition: all 0.25s ease;
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(124,58,237,0.35);
+  transition: transform 0.25s, box-shadow 0.25s;
+  box-shadow: 0 8px 28px rgba(124,58,237,0.40);
+  position: relative; overflow: hidden;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  position: relative;
 }
 .upi-pay-btn::after {
   content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.13), transparent);
   pointer-events: none;
 }
-.upi-pay-btn:hover  { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(124,58,237,0.5); }
+.upi-pay-btn:hover  { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(124,58,237,0.55); }
 .upi-pay-btn:active { transform: translateY(0); }
 
 .btn-content, .btn-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  position: relative;
-  z-index: 1;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  position: relative; z-index: 1;
 }
 .btn-loading { display: none; }
-.btn-loading i { font-size: 20px; }
-.btn-content i { font-size: 20px; }
-
+.btn-content i, .btn-loading i { font-size: 20px; }
 .upi-pay-btn.loading .btn-content  { display: none; }
 .upi-pay-btn.loading .btn-loading  { display: flex; }
 
+/* Trust row */
+.trust {
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(10px,3.5vw,18px);
+  margin-top: 14px; flex-wrap: wrap;
+}
+.trust-item {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--sub);
+}
+.trust-item i { font-size: 13px; color: var(--accent); }
+
 /* UPI info row */
 .upi-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 14px;
-  padding-top: 14px;
+  display: flex; align-items: center; gap: 7px;
+  margin-top: 14px; padding-top: 14px;
   border-top: 1px solid var(--border);
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: wrap; justify-content: center;
 }
-.upi-info > i { color: var(--muted); font-size: 15px; flex-shrink: 0; }
+.upi-info > i { color: var(--sub); font-size: 15px; flex-shrink: 0; }
 .upi-imgs {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  justify-content: center;
-  font-size: 12px;
-  color: var(--muted);
+  display: flex; align-items: center; gap: 6px;
+  flex-wrap: wrap; justify-content: center;
+  font-size: 12px; color: var(--sub);
 }
 .upi-imgs img { display: inline-block; vertical-align: middle; }
 
-/* Trust row */
-.trust {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(10px, 4vw, 18px);
-  margin-top: 14px;
-  flex-wrap: wrap;
-}
-.trust-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  color: var(--muted);
-}
-.trust-item i { font-size: 13px; color: var(--sub); }
-
-/* ── QR Modal ── */
+/* QR Modal */
 .qr-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  z-index: 100;
-  display: none;
-  align-items: center;
-  justify-content: center;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 100; display: none;
+  align-items: center; justify-content: center;
   padding: 16px;
-  animation: fadeIn 0.3s ease;
 }
-.qr-overlay.show { display: flex; }
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.qr-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
 .qr-card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 28px;
-  padding: clamp(24px, 6vw, 36px);
+  border-radius: 26px;
+  padding: clamp(24px,6vw,36px);
   text-align: center;
-  width: 100%;
-  max-width: 340px;
-  box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+  width: 100%; max-width: 340px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.65);
   animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1) both;
 }
 @keyframes slideUp {
-  from { transform: translateY(30px); opacity: 0; }
+  from { transform: translateY(28px); opacity: 0; }
   to   { transform: translateY(0); opacity: 1; }
 }
-.qr-title { font-family: "DM Serif Display", serif; font-size: clamp(18px, 5vw, 22px); margin-bottom: 6px; }
-.qr-subtitle { font-size: 13px; color: var(--sub); margin-bottom: 18px; }
+.qr-title { font-family: "DM Serif Display", serif; font-size: clamp(18px,5vw,22px); margin-bottom: 6px; }
+.qr-subtitle { font-size: 13px; color: var(--sub); margin-bottom: 16px; }
 .qr-amount-badge {
-  display: inline-block;
-  padding: 6px 16px;
-  background: rgba(167,139,250,0.12);
-  border: 1px solid rgba(167,139,250,0.25);
+  display: inline-block; padding: 6px 16px;
+  background: rgba(196,168,255,0.14);
+  border: 1px solid rgba(196,168,255,0.28);
   border-radius: 100px;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--accent);
-  margin-bottom: 18px;
-}
-.qr-img-wrap {
-  background: white;
-  border-radius: 16px;
-  padding: 10px;
-  display: inline-block;
+  font-size: 20px; font-weight: 700; color: var(--accent);
   margin-bottom: 16px;
 }
-.qr-img-wrap img {
-  display: block;
-  width: clamp(160px, 50vw, 200px);
-  height: clamp(160px, 50vw, 200px);
+.qr-img-wrap {
+  background: white; border-radius: 14px;
+  padding: 10px; display: inline-block; margin-bottom: 14px;
 }
-.qr-upi { font-size: 11px; color: var(--muted); margin-bottom: 16px; font-family: monospace; word-break: break-all; }
+.qr-img-wrap img { display: block; width: clamp(160px,48vw,200px); height: clamp(160px,48vw,200px); }
+.qr-upi { font-size: 11px; color: var(--muted); margin-bottom: 14px; font-family: monospace; word-break: break-all; }
 .qr-close {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 24px;
-  border-radius: 100px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--sub);
-  font-family: inherit;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 24px; border-radius: 100px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--sub); font-family: inherit; font-size: 13px;
+  cursor: pointer; transition: all 0.2s;
   -webkit-tap-highlight-color: transparent;
 }
 .qr-close:hover { background: var(--surface); color: var(--text); }
@@ -461,26 +436,27 @@ h1 em { font-style: italic; color: var(--accent); }
 .toast {
   position: fixed;
   bottom: max(24px, env(safe-area-inset-bottom, 24px));
-  left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: #166534;
+  left: 50%; transform: translateX(-50%) translateY(80px);
+  background: #14532d;
   border: 1px solid #16a34a;
   color: #bbf7d0;
   padding: 12px 24px;
-  border-radius: 100px;
-  font-size: 14px;
-  font-weight: 500;
+  border-radius: 100px; font-size: 14px; font-weight: 500;
   z-index: 200;
   transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
-  white-space: nowrap;
-  max-width: calc(100vw - 32px);
-  text-align: center;
+  white-space: nowrap; max-width: calc(100vw - 32px);
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* ── Tablet / small desktop ── */
-@media (min-width: 600px) {
-  body { padding: 24px; }
+/* Responsive */
+@media (max-width: 720px) {
+  .char-side { display: none; }
+  .page { justify-content: center; }
+}
+@media (min-width: 721px) and (max-width: 860px) {
+  :root { --card-h: 240px; }
+  .char-side { width: 88px; }
+  .char-side img { max-width: 110px; }
 }
 </style>
 </head>
@@ -490,7 +466,15 @@ h1 em { font-style: italic; color: var(--accent); }
 <div class="orb orb2"></div>
 <div class="orb orb3"></div>
 
-<div class="wrapper">
+<!-- Scene: char | UPI Card | char -->
+<div class="page">
+
+  <!-- Left — Dark Rider -->
+  <div class="char-side char-left">
+    <img src="https://ggayane.github.io/css-experiments/cards/dark_rider-character.webp" alt="Dark Rider">
+  </div>
+
+  <!-- UPI Card -->
   <div class="card">
 
     <div class="badge"><span class="dot"></span> Open to Support</div>
@@ -514,7 +498,6 @@ h1 em { font-style: italic; color: var(--accent); }
     </div>
 
     <div class="section-label">Choose amount</div>
-
     <div class="amounts">
       <button class="amount-btn active" onclick="setAmount(99, this)">
         <span class="amount-value">₹99</span>
@@ -536,7 +519,7 @@ h1 em { font-style: italic; color: var(--accent); }
 
     <div class="custom-wrap">
       <span class="prefix">₹</span>
-      <input type="number" id="upiAmount" min="1" value="" placeholder="Or enter custom amount" class="custom-input">
+      <input type="number" id="upiAmount" min="1" placeholder="Or enter custom amount" class="custom-input">
     </div>
 
     <div class="section-label">Leave a note (optional)</div>
@@ -546,7 +529,7 @@ h1 em { font-style: italic; color: var(--accent); }
       <span class="btn-content">
         <i class='bx bx-paper-plane'></i>
         <span>Pay via</span>
-        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/upi-icon-light.png" style="height: 38px; display: block;">
+        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/upi-icon-light.png" style="height: 36px; display:block;" alt="UPI">
       </span>
       <span class="btn-loading">
         <i class='bx bx-loader-alt bx-spin'></i>
@@ -563,21 +546,27 @@ h1 em { font-style: italic; color: var(--accent); }
     <div class="upi-info">
       <i class='bx bx-info-circle'></i>
       <p class="upi-imgs">
-        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/google-pay-icon.png" style="height: 22px;" alt="Google Pay">
-        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/phonepe-logo-icon.png" style="height: 22px;" alt="PhonePe">
-        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/paytm-icon.png" style="height: 16px;" alt="Paytm">
+        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/google-pay-icon.png" style="height:22px;" alt="Google Pay">
+        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/phonepe-logo-icon.png" style="height:22px;" alt="PhonePe">
+        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/paytm-icon.png" style="height:16px;" alt="Paytm">
         <span>or any other</span>
-        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/upi-icon-dark.png" style="height: 38px;" alt="UPI">
+        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/upi-icon-dark.png" style="height:36px;" alt="UPI">
         <span>app.</span>
       </p>
     </div>
 
   </div>
+
+  <!-- Right — Force Mage -->
+  <div class="char-side char-right">
+    <img src="https://ggayane.github.io/css-experiments/cards/force_mage-character.webp" alt="Force Mage">
+  </div>
+
 </div>
 
 <!-- QR Modal -->
 <div class="qr-overlay" id="qrOverlay" onclick="closeQR(event)">
-  <div class="qr-card" id="qrCard">
+  <div class="qr-card">
     <div class="qr-title">Scan to Pay</div>
     <div class="qr-subtitle">Open any UPI app and scan the code below</div>
     <div class="qr-amount-badge" id="qrAmountLabel">₹99</div>
@@ -589,13 +578,12 @@ h1 em { font-style: italic; color: var(--accent); }
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast">✓ Redirecting to UPI app…</div>
 
 <script>
-const UPI_ID  = "debojeet9279.ckp@oksbi";
-const NAME    = "Debojeet Bhowmick";
-let   selected = 99;
+const UPI_ID = "debojeet9279.ckp@oksbi";
+const NAME   = "Debojeet Bhowmick";
+let selected = 99;
 
 function setAmount(val, btn) {
   selected = val;
@@ -612,20 +600,17 @@ document.getElementById("upiAmount").addEventListener("input", function() {
 });
 
 function getAmount() {
-  const custom = document.getElementById("upiAmount").value;
-  return custom ? custom : selected;
+  const c = document.getElementById("upiAmount").value;
+  return c ? c : selected;
 }
-
 function getNote() {
   const n = document.getElementById("noteInput").value.trim();
   return n || "Support Contribution";
 }
-
 function buildUPI(amount) {
   const p = { pa: UPI_ID, pn: NAME, am: amount, cu: "INR", tn: getNote() };
   return "upi://pay?" + Object.entries(p).map(([k,v]) => `${k}=${encodeURIComponent(v)}`).join("&");
 }
-
 function showToast(msg) {
   const t = document.getElementById("toast");
   t.textContent = msg;
@@ -636,37 +621,30 @@ function showToast(msg) {
 function initiateUPIPayment() {
   const amount = getAmount();
   if (!amount || isNaN(amount) || Number(amount) < 1) {
-    alert("Please enter a valid amount (min ₹1).");
-    return;
+    alert("Please enter a valid amount (min ₹1)."); return;
   }
-
   const btn = document.getElementById("payBtn");
   btn.classList.add("loading");
-
   const upiLink = buildUPI(amount);
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
   if (isMobile) {
     window.location.href = upiLink;
     showToast("✓ Redirecting to UPI app…");
     setTimeout(() => btn.classList.remove("loading"), 2500);
   } else {
-    const encoded = encodeURIComponent(upiLink);
+    const enc = encodeURIComponent(upiLink);
     document.getElementById("qrImg").src =
-      `https://api.qrserver.com/v1/create-qr-code/?size=400x400&color=0a0a0f&bgcolor=ffffff&data=${encoded}`;
+      `https://api.qrserver.com/v1/create-qr-code/?size=400x400&color=1e2135&bgcolor=ffffff&data=${enc}`;
     document.getElementById("qrAmountLabel").textContent = `₹${amount}`;
     document.getElementById("qrUpiText").textContent = UPI_ID;
     document.getElementById("qrOverlay").classList.add("show");
     setTimeout(() => btn.classList.remove("loading"), 600);
   }
 }
-
 function closeQR(e) {
-  if (!e || e.target === document.getElementById("qrOverlay")) {
+  if (!e || e.target === document.getElementById("qrOverlay"))
     document.getElementById("qrOverlay").classList.remove("show");
-  }
 }
-
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeQR(); });
 </script>
 </body>
