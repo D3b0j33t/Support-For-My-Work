@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>Support Debojeet</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
 <style>
 :root {
@@ -18,24 +19,27 @@
   --accent: #a78bfa;
   --accent2: #7c3aed;
   --gold: #f59e0b;
-  --glow: rgba(167,139,250,0.15);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
 
 body {
   font-family: "DM Sans", sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  padding: 16px;
   position: relative;
+  overflow-x: hidden;
 }
 
-/* Animated background orbs */
+/* Orbs */
 .orb {
   position: fixed;
   border-radius: 50%;
@@ -43,40 +47,41 @@ body {
   opacity: 0.35;
   pointer-events: none;
   animation: drift 12s ease-in-out infinite alternate;
+  will-change: transform;
 }
-.orb1 { width: 500px; height: 500px; background: #4f1d96; top: -150px; left: -100px; animation-delay: 0s; }
-.orb2 { width: 400px; height: 400px; background: #1e1b4b; bottom: -100px; right: -80px; animation-delay: -4s; }
-.orb3 { width: 250px; height: 250px; background: #7c2d12; top: 40%; left: 60%; animation-delay: -7s; }
+.orb1 { width: clamp(260px,60vw,500px); height: clamp(260px,60vw,500px); background: #4f1d96; top: -150px; left: -100px; animation-delay: 0s; }
+.orb2 { width: clamp(200px,50vw,400px); height: clamp(200px,50vw,400px); background: #1e1b4b; bottom: -100px; right: -80px; animation-delay: -4s; }
+.orb3 { width: clamp(140px,30vw,250px); height: clamp(140px,30vw,250px); background: #7c2d12; top: 40%; left: 60%; animation-delay: -7s; }
 
 @keyframes drift {
-  0% { transform: translate(0,0) scale(1); }
-  100% { transform: translate(40px, 30px) scale(1.1); }
+  0%   { transform: translate(0,0) scale(1); }
+  100% { transform: translate(30px, 25px) scale(1.08); }
 }
 
-/* Noise grain overlay */
+/* Grain */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 0;
 }
 
+/* Wrapper */
 .wrapper {
   position: relative;
   z-index: 10;
-  width: 440px;
-  max-width: calc(100vw - 32px);
-  padding: 16px 0;
+  width: 100%;
+  max-width: 460px;
 }
 
 /* Card */
 .card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 28px;
-  padding: 40px 36px;
+  border-radius: clamp(20px, 4vw, 28px);
+  padding: clamp(24px, 6vw, 40px) clamp(20px, 6vw, 36px);
   backdrop-filter: blur(20px);
   box-shadow:
     0 0 0 1px rgba(167,139,250,0.08),
@@ -86,11 +91,11 @@ body::after {
 }
 
 @keyframes cardIn {
-  from { opacity: 0; transform: translateY(32px) scale(0.96); }
+  from { opacity: 0; transform: translateY(28px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Header */
+/* Badge */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -104,76 +109,55 @@ body::after {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
-
 .badge .dot {
   width: 6px; height: 6px;
   background: var(--accent);
   border-radius: 50%;
   animation: pulse 2s ease-in-out infinite;
 }
-
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.8); }
+  50%       { opacity: 0.4; transform: scale(0.75); }
 }
 
 h1 {
   font-family: "DM Serif Display", serif;
-  font-size: 36px;
+  font-size: clamp(26px, 6vw, 36px);
   line-height: 1.1;
   letter-spacing: -0.01em;
-  color: var(--text);
   margin-bottom: 10px;
 }
-
-h1 em {
-  font-style: italic;
-  color: var(--accent);
-}
+h1 em { font-style: italic; color: var(--accent); }
 
 .subtitle {
-  font-size: 14px;
+  font-size: clamp(13px, 3vw, 14px);
   color: var(--sub);
   line-height: 1.6;
-  margin-bottom: 32px;
-  font-weight: 400;
+  margin-bottom: 24px;
 }
 
-/* Divider */
-.divider {
-  height: 1px;
-  background: var(--border);
-  margin: 28px 0;
-}
-
-/* Stat row */
+/* Stats */
 .stats {
   display: flex;
-  gap: 0;
-  margin-bottom: 28px;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 14px;
   overflow: hidden;
+  margin-bottom: 24px;
 }
-
 .stat {
   flex: 1;
   text-align: center;
-  padding: 14px 10px;
+  padding: clamp(10px, 3vw, 14px) 8px;
   border-right: 1px solid var(--border);
 }
-
 .stat:last-child { border-right: none; }
-
 .stat-num {
   font-family: "DM Serif Display", serif;
-  font-size: 22px;
-  color: var(--text);
+  font-size: clamp(18px, 4vw, 22px);
   line-height: 1;
 }
-
 .stat-label {
   font-size: 11px;
   color: var(--sub);
@@ -181,45 +165,47 @@ h1 em {
   letter-spacing: 0.04em;
 }
 
-/* Amount selector */
-.label-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.label {
-  font-size: 12px;
+/* Section label */
+.section-label {
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--sub);
-}
-
-.amounts {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
   margin-bottom: 10px;
 }
 
-.amount {
-  padding: 12px 6px;
+/* Amount buttons */
+.amounts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(6px, 2vw, 8px);
+  margin-bottom: 10px;
+}
+
+@media (max-width: 340px) {
+  .amounts { grid-template-columns: repeat(2, 1fr); }
+}
+
+.amount-btn {
+  padding: clamp(10px, 3vw, 13px) 4px;
   border-radius: 14px;
   background: var(--surface);
   border: 1px solid var(--border);
   cursor: pointer;
-  font-weight: 600;
-  font-size: 14px;
   text-align: center;
   transition: all 0.2s ease;
   color: var(--sub);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
-
-.amount::before {
+.amount-btn::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -227,28 +213,21 @@ h1 em {
   opacity: 0;
   transition: opacity 0.2s;
 }
+.amount-btn:hover  { border-color: rgba(167,139,250,0.4); color: var(--text); }
+.amount-btn.active { border-color: var(--accent); color: var(--text); }
+.amount-btn.active::before { opacity: 0.15; }
 
-.amount span { position: relative; z-index: 1; }
-
-.amount:hover {
-  border-color: rgba(167,139,250,0.4);
-  color: var(--text);
+.amount-value {
+  font-weight: 700;
+  font-size: clamp(13px, 3.5vw, 15px);
+  position: relative;
+  z-index: 1;
 }
-
-.amount.active {
-  border-color: var(--accent);
-  color: var(--text);
-}
-
-.amount.active::before { opacity: 0.15; }
-
-.amount .tag {
-  display: block;
+.amount-label-small {
   font-size: 9px;
   font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--gold);
-  margin-top: 2px;
   text-transform: uppercase;
   position: relative;
   z-index: 1;
@@ -257,12 +236,11 @@ h1 em {
 /* Custom amount */
 .custom-wrap {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
-
 .custom-wrap .prefix {
   position: absolute;
-  left: 16px;
+  left: 14px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--sub);
@@ -270,103 +248,130 @@ h1 em {
   font-size: 15px;
   pointer-events: none;
 }
-
 .custom-input {
   width: 100%;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 13px 16px 13px 34px;
+  padding: 13px 14px 13px 32px;
   color: var(--text);
   font-size: 15px;
   font-family: inherit;
   font-weight: 500;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
 }
-
 .custom-input::placeholder { color: var(--muted); }
-
 .custom-input:focus {
   border-color: rgba(167,139,250,0.5);
   box-shadow: 0 0 0 3px rgba(167,139,250,0.08);
 }
+/* hide spinners */
+.custom-input::-webkit-inner-spin-button,
+.custom-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.custom-input[type=number] { -moz-appearance: textfield; }
 
-/* Note input */
+/* Note */
 .note-input {
   width: 100%;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 12px 16px;
+  padding: 12px 14px;
   color: var(--text);
   font-size: 13px;
   font-family: inherit;
   outline: none;
   resize: none;
   height: 60px;
-  margin-bottom: 20px;
-  transition: border-color 0.2s;
+  margin-bottom: 18px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
 }
-
 .note-input::placeholder { color: var(--muted); }
 .note-input:focus {
   border-color: rgba(167,139,250,0.5);
   box-shadow: 0 0 0 3px rgba(167,139,250,0.08);
 }
 
-/* CTA Button */
-.cta {
+/* Pay button */
+.upi-pay-btn {
   width: 100%;
-  padding: 16px;
+  padding: clamp(14px, 4vw, 16px);
   border-radius: 16px;
   border: none;
   background: linear-gradient(135deg, #7c3aed, #a78bfa);
   color: white;
-  font-size: 15px;
+  font-size: clamp(14px, 3.5vw, 15px);
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
   transition: all 0.25s ease;
-  position: relative;
   overflow: hidden;
-  letter-spacing: 0.01em;
   box-shadow: 0 8px 32px rgba(124,58,237,0.35);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  position: relative;
 }
-
-.cta::after {
+.upi-pay-btn::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
   pointer-events: none;
 }
+.upi-pay-btn:hover  { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(124,58,237,0.5); }
+.upi-pay-btn:active { transform: translateY(0); }
 
-.cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 40px rgba(124,58,237,0.5);
-}
-
-.cta:active { transform: translateY(0); }
-
-.cta .btn-inner {
+.btn-content, .btn-loading {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  position: relative;
+  z-index: 1;
 }
+.btn-loading { display: none; }
+.btn-loading i { font-size: 20px; }
+.btn-content i { font-size: 20px; }
 
-.cta svg { width: 18px; height: 18px; }
+.upi-pay-btn.loading .btn-content  { display: none; }
+.upi-pay-btn.loading .btn-loading  { display: flex; }
+
+/* UPI info row */
+.upi-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.upi-info > i { color: var(--muted); font-size: 15px; flex-shrink: 0; }
+.upi-imgs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+.upi-imgs img { display: inline-block; vertical-align: middle; }
 
 /* Trust row */
 .trust {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  margin-top: 16px;
+  gap: clamp(10px, 4vw, 18px);
+  margin-top: 14px;
+  flex-wrap: wrap;
 }
-
 .trust-item {
   display: flex;
   align-items: center;
@@ -374,95 +379,43 @@ h1 em {
   font-size: 11px;
   color: var(--muted);
 }
+.trust-item i { font-size: 13px; color: var(--sub); }
 
-.trust-item svg { width: 12px; height: 12px; color: var(--sub); }
-
-/* UPI apps */
-.apps-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px solid var(--border);
-  flex-wrap: wrap;
-}
-
-.apps-label {
-  font-size: 11px;
-  color: var(--muted);
-  white-space: nowrap;
-}
-
-.app-icon {
-  width: 34px; height: 34px;
-  border-radius: 9px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  padding: 5px;
-  opacity: 0.72;
-  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.app-icon:hover {
-  opacity: 1;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
-}
-.app-icon img { width: 100%; height: 100%; object-fit: contain; }
-
-/* QR Modal */
+/* ── QR Modal ── */
 .qr-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.75);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   z-index: 100;
   display: none;
   align-items: center;
   justify-content: center;
+  padding: 16px;
   animation: fadeIn 0.3s ease;
 }
-
 .qr-overlay.show { display: flex; }
 
-@keyframes fadeIn {
-  from { opacity: 0; } to { opacity: 1; }
-}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .qr-card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 28px;
-  padding: 36px;
+  padding: clamp(24px, 6vw, 36px);
   text-align: center;
-  width: 340px;
-  max-width: calc(100vw - 32px);
+  width: 100%;
+  max-width: 340px;
   box-shadow: 0 40px 80px rgba(0,0,0,0.7);
   animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1) both;
 }
-
 @keyframes slideUp {
   from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  to   { transform: translateY(0); opacity: 1; }
 }
-
-.qr-title {
-  font-family: "DM Serif Display", serif;
-  font-size: 22px;
-  margin-bottom: 6px;
-}
-
-.qr-subtitle {
-  font-size: 13px;
-  color: var(--sub);
-  margin-bottom: 20px;
-}
-
+.qr-title { font-family: "DM Serif Display", serif; font-size: clamp(18px, 5vw, 22px); margin-bottom: 6px; }
+.qr-subtitle { font-size: 13px; color: var(--sub); margin-bottom: 18px; }
 .qr-amount-badge {
   display: inline-block;
   padding: 6px 16px;
@@ -472,28 +425,25 @@ h1 em {
   font-size: 20px;
   font-weight: 700;
   color: var(--accent);
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
-
 .qr-img-wrap {
   background: white;
   border-radius: 16px;
-  padding: 12px;
+  padding: 10px;
   display: inline-block;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
-
-.qr-img-wrap img { display: block; width: 200px; height: 200px; }
-
-.qr-upi {
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 20px;
-  font-family: monospace;
+.qr-img-wrap img {
+  display: block;
+  width: clamp(160px, 50vw, 200px);
+  height: clamp(160px, 50vw, 200px);
 }
-
+.qr-upi { font-size: 11px; color: var(--muted); margin-bottom: 16px; font-family: monospace; word-break: break-all; }
 .qr-close {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 10px 24px;
   border-radius: 100px;
   border: 1px solid var(--border);
@@ -503,17 +453,14 @@ h1 em {
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
+.qr-close:hover { background: var(--surface); color: var(--text); }
 
-.qr-close:hover {
-  background: var(--surface);
-  color: var(--text);
-}
-
-/* Success toast */
+/* Toast */
 .toast {
   position: fixed;
-  bottom: 32px;
+  bottom: max(24px, env(safe-area-inset-bottom, 24px));
   left: 50%;
   transform: translateX(-50%) translateY(80px);
   background: #166534;
@@ -526,14 +473,19 @@ h1 em {
   z-index: 200;
   transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
   white-space: nowrap;
+  max-width: calc(100vw - 32px);
+  text-align: center;
 }
-
 .toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── Tablet / small desktop ── */
+@media (min-width: 600px) {
+  body { padding: 24px; }
+}
 </style>
 </head>
 <body>
 
-<!-- Background orbs -->
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
 <div class="orb orb3"></div>
@@ -541,10 +493,7 @@ h1 em {
 <div class="wrapper">
   <div class="card">
 
-    <div class="badge">
-      <span class="dot"></span>
-      Open to Support
-    </div>
+    <div class="badge"><span class="dot"></span> Open to Support</div>
 
     <h1>Fuel the <em>work</em> that matters.</h1>
     <p class="subtitle">If something I built or wrote made your day better, your support keeps the momentum going — no strings attached.</p>
@@ -564,98 +513,63 @@ h1 em {
       </div>
     </div>
 
-    <div class="label-row">
-      <span class="label">Choose amount</span>
-      <span class="label" style="color: var(--accent); font-size: 11px;">or enter custom →</span>
-    </div>
+    <div class="section-label">Choose amount</div>
 
     <div class="amounts">
-      <div class="amount active" data-amount="49">
-        <span>₹49</span>
-        <span class="tag">Coffee</span>
-      </div>
-      <div class="amount" data-amount="99">
-        <span>₹99</span>
-        <span class="tag">Snack</span>
-      </div>
-      <div class="amount" data-amount="199">
-        <span>₹199</span>
-        <span class="tag">Meal</span>
-      </div>
-      <div class="amount" data-amount="499">
-        <span>₹499</span>
-        <span class="tag">🔥 Top</span>
-      </div>
+      <button class="amount-btn active" onclick="setAmount(99, this)">
+        <span class="amount-value">₹99</span>
+        <span class="amount-label-small">Coffee</span>
+      </button>
+      <button class="amount-btn" onclick="setAmount(199, this)">
+        <span class="amount-value">₹199</span>
+        <span class="amount-label-small">Lunch</span>
+      </button>
+      <button class="amount-btn" onclick="setAmount(499, this)">
+        <span class="amount-value">₹499</span>
+        <span class="amount-label-small">Dinner</span>
+      </button>
+      <button class="amount-btn" onclick="setAmount(899, this)">
+        <span class="amount-value">₹899</span>
+        <span class="amount-label-small">🔥 Treat</span>
+      </button>
     </div>
 
     <div class="custom-wrap">
       <span class="prefix">₹</span>
-      <input type="number" class="custom-input" id="customInput" placeholder="Custom amount" min="1" />
+      <input type="number" id="upiAmount" min="1" value="" placeholder="Or enter custom amount" class="custom-input">
     </div>
 
-    <div class="label-row"><span class="label">Leave a note (optional)</span></div>
+    <div class="section-label">Leave a note (optional)</div>
     <textarea class="note-input" id="noteInput" placeholder="Say something kind… or nothing at all 🙂"></textarea>
 
-    <button class="cta" onclick="pay()">
-      <div class="btn-inner">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="1" y="4" width="22" height="16" rx="3"/><line x1="1" y1="10" x2="23" y2="10"/>
-        </svg>
-        Pay with UPI
-      </div>
+    <button class="upi-pay-btn" id="payBtn" onclick="initiateUPIPayment()">
+      <span class="btn-content">
+        <i class='bx bx-paper-plane'></i>
+        <span>Pay via</span>
+        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/upi-icon-light.png" style="height: 38px; display: block;">
+      </span>
+      <span class="btn-loading">
+        <i class='bx bx-loader-alt bx-spin'></i>
+        <span>Opening…</span>
+      </span>
     </button>
 
     <div class="trust">
-      <div class="trust-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
-        Secure
-      </div>
-      <div class="trust-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-        </svg>
-        Instant
-      </div>
-      <div class="trust-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-        No Account
-      </div>
+      <div class="trust-item"><i class='bx bx-shield-quarter'></i> Secure</div>
+      <div class="trust-item"><i class='bx bx-time-five'></i> Instant</div>
+      <div class="trust-item"><i class='bx bx-user-check'></i> No Account</div>
     </div>
 
-    <div class="apps-row">
-      <span class="apps-label">Works with</span>
-
-      <!-- Google Pay - official Wikimedia SVG -->
-      <div class="app-icon" title="Google Pay">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" alt="Google Pay">
-      </div>
-
-      <!-- PhonePe - official Wikimedia SVG -->
-      <div class="app-icon" title="PhonePe" style="background:#5f259f;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" alt="PhonePe">
-      </div>
-
-      <!-- Paytm - official Wikimedia SVG -->
-      <div class="app-icon" title="Paytm" style="background:#002970;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/Paytm_logo.png" alt="Paytm">
-      </div>
-
-      <!-- BHIM UPI - official Wikimedia SVG -->
-      <div class="app-icon" title="BHIM" style="background:#fff;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/BHIM_SVG_Logo.svg" alt="BHIM UPI">
-      </div>
-
-      <!-- UPI official logo -->
-      <div class="app-icon" title="UPI" style="background:#fff;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e2/UPI-Logo-vector.svg" alt="UPI">
-      </div>
-
-      <span class="apps-label">& more</span>
+    <div class="upi-info">
+      <i class='bx bx-info-circle'></i>
+      <p class="upi-imgs">
+        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/google-pay-icon.png" style="height: 22px;" alt="Google Pay">
+        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/phonepe-logo-icon.png" style="height: 22px;" alt="PhonePe">
+        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/paytm-icon.png" style="height: 16px;" alt="Paytm">
+        <span>or any other</span>
+        <img src="https://debojeet-bhowmick.netlify.app/assets/images/upi-widget-imgs/upi-icon-dark.png" style="height: 38px;" alt="UPI">
+        <span>app.</span>
+      </p>
     </div>
 
   </div>
@@ -666,12 +580,12 @@ h1 em {
   <div class="qr-card" id="qrCard">
     <div class="qr-title">Scan to Pay</div>
     <div class="qr-subtitle">Open any UPI app and scan the code below</div>
-    <div class="qr-amount-badge" id="qrAmountLabel">₹49</div>
+    <div class="qr-amount-badge" id="qrAmountLabel">₹99</div>
     <div class="qr-img-wrap">
-      <img id="qrImg" src="" alt="QR Code" />
+      <img id="qrImg" src="" alt="QR Code" width="200" height="200">
     </div>
     <div class="qr-upi" id="qrUpiText"></div>
-    <button class="qr-close" onclick="closeQR()">✕ &nbsp; Close</button>
+    <button class="qr-close" onclick="closeQR()"><i class='bx bx-x'></i> Close</button>
   </div>
 </div>
 
@@ -679,31 +593,27 @@ h1 em {
 <div class="toast" id="toast">✓ Redirecting to UPI app…</div>
 
 <script>
-const UPI_ID = "debojeet9279.ckp@oksbi";
-const NAME = "Debojeet Bhowmick";
-let selectedAmount = "49";
+const UPI_ID  = "debojeet9279.ckp@oksbi";
+const NAME    = "Debojeet Bhowmick";
+let   selected = 99;
 
-// Amount selector
-document.querySelectorAll(".amount").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".amount").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    selectedAmount = btn.dataset.amount;
-    document.getElementById("customInput").value = "";
-  });
-});
+function setAmount(val, btn) {
+  selected = val;
+  document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("upiAmount").value = "";
+}
 
-// Custom input
-document.getElementById("customInput").addEventListener("input", function() {
+document.getElementById("upiAmount").addEventListener("input", function() {
   if (this.value) {
-    document.querySelectorAll(".amount").forEach(b => b.classList.remove("active"));
-    selectedAmount = this.value;
+    selected = null;
+    document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("active"));
   }
 });
 
 function getAmount() {
-  const custom = document.getElementById("customInput").value;
-  return custom ? custom : selectedAmount;
+  const custom = document.getElementById("upiAmount").value;
+  return custom ? custom : selected;
 }
 
 function getNote() {
@@ -712,15 +622,8 @@ function getNote() {
 }
 
 function buildUPI(amount) {
-  const params = {
-    pa: UPI_ID,
-    pn: NAME,
-    am: amount,
-    cu: "INR",
-    tn: getNote()
-  };
-  return "upi://pay?" + Object.entries(params)
-    .map(([k,v]) => `${k}=${encodeURIComponent(v)}`).join("&");
+  const p = { pa: UPI_ID, pn: NAME, am: amount, cu: "INR", tn: getNote() };
+  return "upi://pay?" + Object.entries(p).map(([k,v]) => `${k}=${encodeURIComponent(v)}`).join("&");
 }
 
 function showToast(msg) {
@@ -730,12 +633,15 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove("show"), 3000);
 }
 
-function pay() {
+function initiateUPIPayment() {
   const amount = getAmount();
   if (!amount || isNaN(amount) || Number(amount) < 1) {
-    alert("Please enter a valid amount.");
+    alert("Please enter a valid amount (min ₹1).");
     return;
   }
+
+  const btn = document.getElementById("payBtn");
+  btn.classList.add("loading");
 
   const upiLink = buildUPI(amount);
   const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -743,14 +649,15 @@ function pay() {
   if (isMobile) {
     window.location.href = upiLink;
     showToast("✓ Redirecting to UPI app…");
+    setTimeout(() => btn.classList.remove("loading"), 2500);
   } else {
-    // Show QR
     const encoded = encodeURIComponent(upiLink);
     document.getElementById("qrImg").src =
       `https://api.qrserver.com/v1/create-qr-code/?size=400x400&color=0a0a0f&bgcolor=ffffff&data=${encoded}`;
     document.getElementById("qrAmountLabel").textContent = `₹${amount}`;
     document.getElementById("qrUpiText").textContent = UPI_ID;
     document.getElementById("qrOverlay").classList.add("show");
+    setTimeout(() => btn.classList.remove("loading"), 600);
   }
 }
 
@@ -760,11 +667,7 @@ function closeQR(e) {
   }
 }
 
-// Keyboard ESC to close
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape") closeQR();
-});
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeQR(); });
 </script>
-
 </body>
 </html>
