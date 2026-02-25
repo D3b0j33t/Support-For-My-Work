@@ -768,6 +768,740 @@ document.addEventListener("keydown", e => {
 
 </body>
 </html>
+
+/* Animated background orbs */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+  animation: drift 12s ease-in-out infinite alternate;
+}
+.orb1 { width: 500px; height: 500px; background: #4f1d96; top: -150px; left: -100px; animation-delay: 0s; }
+.orb2 { width: 400px; height: 400px; background: #1e1b4b; bottom: -100px; right: -80px; animation-delay: -4s; }
+.orb3 { width: 250px; height: 250px; background: #7c2d12; top: 40%; left: 60%; animation-delay: -7s; }
+
+@keyframes drift {
+  0% { transform: translate(0,0) scale(1); }
+  100% { transform: translate(40px, 30px) scale(1.1); }
+}
+
+/* Noise grain overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrapper {
+  position: relative;
+  z-index: 10;
+  width: 440px;
+  max-width: calc(100vw - 32px);
+  padding: 16px 0;
+}
+
+/* Card */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 40px 36px;
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 0 0 1px rgba(167,139,250,0.08),
+    0 40px 80px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+  animation: cardIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(32px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Header */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: rgba(167,139,250,0.12);
+  border: 1px solid rgba(167,139,250,0.2);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+.badge .dot {
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+h1 {
+  font-family: "DM Serif Display", serif;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--sub);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  font-weight: 400;
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 28px 0;
+}
+
+/* Stat row */
+.stats {
+  display: flex;
+  gap: 0;
+  margin-bottom: 28px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+  padding: 14px 10px;
+  border-right: 1px solid var(--border);
+}
+
+.stat:last-child { border-right: none; }
+
+.stat-num {
+  font-family: "DM Serif Display", serif;
+  font-size: 22px;
+  color: var(--text);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--sub);
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+}
+
+/* Amount selector */
+.label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sub);
+}
+
+.amounts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.amount {
+  padding: 12px 6px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  transition: all 0.2s ease;
+  color: var(--sub);
+  position: relative;
+  overflow: hidden;
+}
+
+.amount::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.amount span { position: relative; z-index: 1; }
+
+.amount:hover {
+  border-color: rgba(167,139,250,0.4);
+  color: var(--text);
+}
+
+.amount.active {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.amount.active::before { opacity: 0.15; }
+
+.amount .tag {
+  display: block;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--gold);
+  margin-top: 2px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+
+/* Custom amount */
+.custom-wrap {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.custom-wrap .prefix {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--sub);
+  font-weight: 600;
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.custom-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 13px 16px 13px 34px;
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.custom-input::placeholder { color: var(--muted); }
+
+.custom-input:focus {
+  border-color: rgba(167,139,250,0.5);
+  box-shadow: 0 0 0 3px rgba(167,139,250,0.08);
+}
+
+/* Note input */
+.note-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  resize: none;
+  height: 60px;
+  margin-bottom: 20px;
+  transition: border-color 0.2s;
+}
+
+.note-input::placeholder { color: var(--muted); }
+.note-input:focus {
+  border-color: rgba(167,139,250,0.5);
+  box-shadow: 0 0 0 3px rgba(167,139,250,0.08);
+}
+
+/* CTA Button */
+.cta {
+  width: 100%;
+  padding: 16px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.01em;
+  box-shadow: 0 8px 32px rgba(124,58,237,0.35);
+}
+
+.cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  pointer-events: none;
+}
+
+.cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(124,58,237,0.5);
+}
+
+.cta:active { transform: translateY(0); }
+
+.cta .btn-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cta svg { width: 18px; height: 18px; }
+
+/* Trust row */
+.trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.trust-item svg { width: 12px; height: 12px; color: var(--sub); }
+
+/* UPI apps */
+.apps-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.apps-label {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.app-icon {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  padding: 5px;
+  opacity: 0.72;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.app-icon:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+}
+.app-icon img { width: 100%; height: 100%; object-fit: contain; }
+
+/* QR Modal */
+.qr-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.qr-overlay.show { display: flex; }
+
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+
+.qr-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 36px;
+  text-align: center;
+  width: 340px;
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+  animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.qr-title {
+  font-family: "DM Serif Display", serif;
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.qr-subtitle {
+  font-size: 13px;
+  color: var(--sub);
+  margin-bottom: 20px;
+}
+
+.qr-amount-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  background: rgba(167,139,250,0.12);
+  border: 1px solid rgba(167,139,250,0.25);
+  border-radius: 100px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+.qr-img-wrap {
+  background: white;
+  border-radius: 16px;
+  padding: 12px;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.qr-img-wrap img { display: block; width: 200px; height: 200px; }
+
+.qr-upi {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 20px;
+  font-family: monospace;
+}
+
+.qr-close {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--sub);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.qr-close:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* Success toast */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #166534;
+  border: 1px solid #16a34a;
+  color: #bbf7d0;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 200;
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  white-space: nowrap;
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- Background orbs -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div class="wrapper">
+  <div class="card">
+
+    <div class="badge">
+      <span class="dot"></span>
+      Open to Support
+    </div>
+
+    <h1>Fuel the <em>work</em> that matters.</h1>
+    <p class="subtitle">If something I built or wrote made your day better, your support keeps the momentum going — no strings attached.</p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">12+</div>
+        <div class="stat-label">Projects</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">40+</div>
+        <div class="stat-label">Supporters</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Independent</div>
+      </div>
+    </div>
+
+    <div class="label-row">
+      <span class="label">Choose amount</span>
+      <span class="label" style="color: var(--accent); font-size: 11px;">or enter custom →</span>
+    </div>
+
+    <div class="amounts">
+      <div class="amount active" data-amount="49">
+        <span>₹49</span>
+        <span class="tag">Coffee</span>
+      </div>
+      <div class="amount" data-amount="99">
+        <span>₹99</span>
+        <span class="tag">Snack</span>
+      </div>
+      <div class="amount" data-amount="199">
+        <span>₹199</span>
+        <span class="tag">Meal</span>
+      </div>
+      <div class="amount" data-amount="499">
+        <span>₹499</span>
+        <span class="tag">🔥 Top</span>
+      </div>
+    </div>
+
+    <div class="custom-wrap">
+      <span class="prefix">₹</span>
+      <input type="number" class="custom-input" id="customInput" placeholder="Custom amount" min="1" />
+    </div>
+
+    <div class="label-row"><span class="label">Leave a note (optional)</span></div>
+    <textarea class="note-input" id="noteInput" placeholder="Say something kind… or nothing at all 🙂"></textarea>
+
+    <button class="cta" onclick="pay()">
+      <div class="btn-inner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="4" width="22" height="16" rx="3"/><line x1="1" y1="10" x2="23" y2="10"/>
+        </svg>
+        Pay with UPI
+      </div>
+    </button>
+
+    <div class="trust">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Secure
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+        </svg>
+        Instant
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        No Account
+      </div>
+    </div>
+
+    <div class="apps-row">
+      <span class="apps-label">Works with</span>
+
+      <!-- Google Pay - official Wikimedia SVG -->
+      <div class="app-icon" title="Google Pay">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" alt="Google Pay">
+      </div>
+
+      <!-- PhonePe - official Wikimedia SVG -->
+      <div class="app-icon" title="PhonePe" style="background:#5f259f;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" alt="PhonePe">
+      </div>
+
+      <!-- Paytm - official Wikimedia SVG -->
+      <div class="app-icon" title="Paytm" style="background:#002970;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/Paytm_logo.png" alt="Paytm">
+      </div>
+
+      <!-- BHIM UPI - official Wikimedia SVG -->
+      <div class="app-icon" title="BHIM" style="background:#fff;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/BHIM_SVG_Logo.svg" alt="BHIM UPI">
+      </div>
+
+      <!-- UPI official logo -->
+      <div class="app-icon" title="UPI" style="background:#fff;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e2/UPI-Logo-vector.svg" alt="UPI">
+      </div>
+
+      <span class="apps-label">& more</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- QR Modal -->
+<div class="qr-overlay" id="qrOverlay" onclick="closeQR(event)">
+  <div class="qr-card" id="qrCard">
+    <div class="qr-title">Scan to Pay</div>
+    <div class="qr-subtitle">Open any UPI app and scan the code below</div>
+    <div class="qr-amount-badge" id="qrAmountLabel">₹49</div>
+    <div class="qr-img-wrap">
+      <img id="qrImg" src="" alt="QR Code" />
+    </div>
+    <div class="qr-upi" id="qrUpiText"></div>
+    <button class="qr-close" onclick="closeQR()">✕ &nbsp; Close</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">✓ Redirecting to UPI app…</div>
+
+<script>
+const UPI_ID = "debojeet9279.ckp@oksbi";
+const NAME = "Debojeet Bhowmick";
+let selectedAmount = "49";
+
+// Amount selector
+document.querySelectorAll(".amount").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".amount").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedAmount = btn.dataset.amount;
+    document.getElementById("customInput").value = "";
+  });
+});
+
+// Custom input
+document.getElementById("customInput").addEventListener("input", function() {
+  if (this.value) {
+    document.querySelectorAll(".amount").forEach(b => b.classList.remove("active"));
+    selectedAmount = this.value;
+  }
+});
+
+function getAmount() {
+  const custom = document.getElementById("customInput").value;
+  return custom ? custom : selectedAmount;
+}
+
+function getNote() {
+  const n = document.getElementById("noteInput").value.trim();
+  return n || "Support Contribution";
+}
+
+function buildUPI(amount) {
+  const params = {
+    pa: UPI_ID,
+    pn: NAME,
+    am: amount,
+    cu: "INR",
+    tn: getNote()
+  };
+  return "upi://pay?" + Object.entries(params)
+    .map(([k,v]) => `${k}=${encodeURIComponent(v)}`).join("&");
+}
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 3000);
+}
+
+function pay() {
+  const amount = getAmount();
+  if (!amount || isNaN(amount) || Number(amount) < 1) {
+    alert("Please enter a valid amount.");
+    return;
+  }
+
+  const upiLink = buildUPI(amount);
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    window.location.href = upiLink;
+    showToast("✓ Redirecting to UPI app…");
+  } else {
+    // Show QR
+    const encoded = encodeURIComponent(upiLink);
+    document.getElementById("qrImg").src =
+      `https://api.qrserver.com/v1/create-qr-code/?size=400x400&color=0a0a0f&bgcolor=ffffff&data=${encoded}`;
+    document.getElementById("qrAmountLabel").textContent = `₹${amount}`;
+    document.getElementById("qrUpiText").textContent = UPI_ID;
+    document.getElementById("qrOverlay").classList.add("show");
+  }
+}
+
+function closeQR(e) {
+  if (!e || e.target === document.getElementById("qrOverlay")) {
+    document.getElementById("qrOverlay").classList.remove("show");
+  }
+}
+
+// Keyboard ESC to close
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeQR();
+});
+</script>
+
+</body>
+</html>
   color: var(--text);
   display: flex;
   justify-content: center;
