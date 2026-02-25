@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Support Debojeet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #f9fafb;
+  --card: #ffffff;
+  --text: #111827;
+  --sub: #6b7280;
+  --accent: #111827;
+  --highlight: #2563eb;
+}
+
+body.dark {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f1f5f9;
+  --sub: #94a3b8;
+  --accent: #ffffff;
+  --highlight: #3b82f6;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  transition: 0.3s ease;
+}
+
+.container {
+  background: var(--card);
+  width: 400px;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+  text-align: center;
+  position: relative;
+  transition: 0.3s ease;
+}
+
+.toggle {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--sub);
+}
+
+h1 {
+  margin-bottom: 8px;
+  font-size: 24px;
+}
+
+p {
+  font-size: 14px;
+  color: var(--sub);
+  margin-bottom: 25px;
+}
+
+.amounts {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+.amount {
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: #e5e7eb;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+body.dark .amount {
+  background: #334155;
+}
+
+.amount.active {
+  background: var(--highlight);
+  color: white;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.03);
+}
+
+.apps {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  opacity: 0.7;
+}
+
+.apps img {
+  width: 28px;
+  height: 28px;
+}
+
+#qr {
+  margin-top: 20px;
+  display: none;
+}
+
+.small-note {
+  margin-top: 15px;
+  font-size: 12px;
+  color: var(--sub);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="toggle" onclick="toggleDark()">Toggle Mode</div>
+
+  <h1>Support the Work</h1>
+  <p>If my projects or content delivered value, you can contribute here.</p>
+
+  <div class="amounts">
+    <div class="amount active" data-amount="49">₹49</div>
+    <div class="amount" data-amount="99">₹99</div>
+    <div class="amount" data-amount="199">₹199</div>
+  </div>
+
+  <button onclick="pay()">Continue with UPI</button>
+
+  <div class="apps">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Google_Pay_Logo.svg">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/PhonePe_Logo.svg">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Paytm_logo.png">
+  </div>
+
+  <img id="qr" width="220">
+
+  <div class="small-note">
+    Secure UPI payment • No data stored
+  </div>
+</div>
+
+<script>
+const upiId = "debojeet9279.ckp@oksbi";
+const name = "Debojeet Bhowmick";
+const note = "Support Contribution";
+
+let selectedAmount = "49";
+
+document.querySelectorAll(".amount").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".amount").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedAmount = btn.dataset.amount;
+  });
+});
+
+function buildLink() {
+  const params = {
+    pa: upiId,
+    pn: name,
+    am: selectedAmount,
+    cu: "INR",
+    tn: note
+  };
+
+  const query = Object.entries(params)
+    .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+    .join("&");
+
+  return `upi://pay?${query}`;
+}
+
+function pay() {
+  const upiLink = buildLink();
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    window.location.href = upiLink;
+  } else {
+    const encoded = encodeURIComponent(upiLink);
+    const qr = document.getElementById("qr");
+    qr.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encoded}`;
+    qr.style.display = "block";
+  }
+}
+
+function toggleDark() {
+  document.body.classList.toggle("dark");
+}
+</script>
+
+</body>
+</html>
